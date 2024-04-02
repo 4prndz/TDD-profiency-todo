@@ -35,12 +35,40 @@ describe("Todos application", () => {
     });
 
     const item = screen.getByText("buy some milk");
+    await waitFor(() => {
+      expect(item).toBeInTheDocument();
+    });
     act(() => {
       userEvent.click(item);
     });
-
     await waitFor(() => {
-      expect(item).toHaveAttribute("data-completed", "true");
+      expect(item).toHaveAttribute(
+        "data-completed",
+        "true"
+      );
+    });
+  });
+
+  it("delete an item when the button is clicked", async () => {
+    render(<Todo />);
+
+    const input = screen.getByTestId("todo-input");
+    act(() => {
+      userEvent.type(input, "buy some milk");
+      userEvent.type(input, "{enter}");
+    });
+
+    const item = screen.getByText("buy some milk");
+    await waitFor(() => {
+      expect(item).toBeInTheDocument();
+    });
+
+    const deleteButton = screen.getByTestId("delete-button");
+    act(() => {
+      userEvent.click(deleteButton);
+    });
+    await waitFor(() => {
+      expect(item).not.toBeInTheDocument();
     });
   });
 });
