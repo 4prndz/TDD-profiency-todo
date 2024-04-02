@@ -1,8 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { TodoType } from "./types";
 
-export const useTodos = () => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
+export const useTodos = (items: TodoType[] = []) => {
+  const [todos, setTodos] = useState<TodoType[]>(items);
+
+  const [category, setCategory] = useState<string>("total");
+
+  const displayTodos = useMemo(() => {
+    switch (category) {
+      case "total":
+        return todos;
+      case "completed":
+        return todos.filter((todo) => todo.completed);
+      case "active":
+        return todos.filter((todo) => !todo.completed);
+      default:
+        return todos;
+    }
+  }, [category, todos]);
 
   const addTodo = (todo: TodoType) => {
     setTodos([todo, ...todos]);
@@ -24,9 +39,10 @@ export const useTodos = () => {
   };
 
   return {
-    todos,
+    displayTodos,
     addTodo,
     toggleTodo,
-    deleteTodo
+    deleteTodo,
+    setCategory,
   };
 };

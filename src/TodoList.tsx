@@ -16,6 +16,7 @@ export const TodoList = ({
           <span
             data-completed={todo.completed}
             onClick={() => onToggleItem(todo)}
+            data-testid="todo-item"
           >
             {todo.content}
           </span>
