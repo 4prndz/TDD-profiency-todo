@@ -19,6 +19,14 @@ export const useTodos = (items: TodoType[] = []) => {
     }
   }, [category, todos]);
 
+  const aggregation = useMemo(() => {
+    return {
+      total: todos.length,
+      completed: todos.filter((todo) => todo.completed).length,
+      active:  todos.filter((todo) => !todo.completed).length,
+    }
+ }, [todos])
+
   const addTodo = (todo: TodoType) => {
     setTodos([todo, ...todos]);
   };
@@ -40,9 +48,10 @@ export const useTodos = (items: TodoType[] = []) => {
 
   return {
     displayTodos,
+    aggregation,
     addTodo,
     toggleTodo,
     deleteTodo,
-    setCategory,
+    switchCategory: setCategory,
   };
 };

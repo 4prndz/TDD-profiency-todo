@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-unnecessary-act */
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { Todo } from "./Todo";
@@ -165,5 +165,49 @@ describe("Todos application", () => {
       userEvent.click(activeTab);
     });
     expect(screen.getAllByTestId("todo-item").length).toEqual(2);
+  });
+
+  it("shows summary information", async () => {
+    const items = [
+      {
+        id: "1",
+        content: "buy some milk",
+        completed: false,
+      },
+      {
+        id: "2",
+        content: "learn react",
+        completed: true,
+      },
+      {
+        id: "3",
+        content: "clean the house",
+        completed: false,
+      },
+    ];
+
+    render(<Todo items={items} />);
+    const todoItems = screen.getAllByTestId("todo-item");
+    await waitFor(() => {
+      expect(todoItems.length).toEqual(items.length);
+    });
+
+    const activeTab = screen.getByTestId("todo-active");
+    act(() => {
+      userEvent.click(activeTab);
+    });
+
+    const completedTab = screen.getByTestId("todo-completed");
+    act(() => {
+      userEvent.click(completedTab);
+    });
+
+    const totalTab = screen.getByTestId("todo-total");
+    act(() => {
+      userEvent.click(totalTab);
+    });
+    expect(within(activeTab).getByText("2")).toBeInTheDocument();
+    expect(within(completedTab).getByText("1")).toBeInTheDocument();
+    expect(within(totalTab).getByText("3")).toBeInTheDocument();
   });
 });
