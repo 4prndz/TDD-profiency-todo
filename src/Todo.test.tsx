@@ -94,7 +94,7 @@ describe("Todos application", () => {
     });
   });
 
-  it("'renders different groups of items", async () => {
+  describe("Aggregation", () => {
     const items = [
       {
         id: "1",
@@ -112,30 +112,71 @@ describe("Todos application", () => {
         completed: false,
       },
     ];
+    it("'renders different groups of items", async () => {
+      render(<Todo items={items} />);
+      const todoItems = screen.getAllByTestId("todo-item");
 
-    render(<Todo items={items} />);
-    const todoItems = screen.getAllByTestId("todo-item");
+      await waitFor(() => {
+        expect(todoItems.length).toEqual(items.length);
+      });
 
-    await waitFor(() => {
-      expect(todoItems.length).toEqual(items.length);
+      const completedTab = screen.getByTestId("todo-completed");
+      act(() => {
+        userEvent.click(completedTab);
+      });
+      expect(screen.getAllByTestId("todo-item").length).toEqual(1);
+      expect(screen.getByText("learn react")).toBeInTheDocument();
+
+      const totalTab = screen.getByTestId("todo-total");
+      act(() => {
+        userEvent.click(totalTab);
+      });
+
+      expect(screen.getAllByTestId("todo-item").length).toEqual(3);
     });
 
-    const completedTab = screen.getByTestId("todo-completed");
-    act(() => {
-      userEvent.click(completedTab);
-    });
-    expect(screen.getAllByTestId("todo-item").length).toEqual(1);
-    expect(screen.getByText("learn react")).toBeInTheDocument();
+    it("renders active tab", async () => {
+      render(<Todo items={items} />);
+      const todoItems = screen.getAllByTestId("todo-item");
+      await waitFor(() => {
+        expect(todoItems.length).toEqual(items.length);
+      });
 
-    const totalTab = screen.getByTestId("todo-total");
-    act(() => {
-      userEvent.click(totalTab);
+      const activeTab = screen.getByTestId("todo-active");
+      act(() => {
+        userEvent.click(activeTab);
+      });
+      expect(screen.getAllByTestId("todo-item").length).toEqual(2);
     });
 
-    expect(screen.getAllByTestId("todo-item").length).toEqual(3);
+    it("shows summary information", async () => {
+      render(<Todo items={items} />);
+      const todoItems = screen.getAllByTestId("todo-item");
+      await waitFor(() => {
+        expect(todoItems.length).toEqual(items.length);
+      });
+
+      const activeTab = screen.getByTestId("todo-active");
+      act(() => {
+        userEvent.click(activeTab);
+      });
+
+      const completedTab = screen.getByTestId("todo-completed");
+      act(() => {
+        userEvent.click(completedTab);
+      });
+
+      const totalTab = screen.getByTestId("todo-total");
+      act(() => {
+        userEvent.click(totalTab);
+      });
+      expect(within(activeTab).getByText("2")).toBeInTheDocument();
+      expect(within(completedTab).getByText("1")).toBeInTheDocument();
+      expect(within(totalTab).getByText("3")).toBeInTheDocument();
+    });
   });
 
-  it("renders active tab", async () => {
+  describe("Search", () => {
     const items = [
       {
         id: "1",
@@ -149,65 +190,17 @@ describe("Todos application", () => {
       },
       {
         id: "3",
-        content: "clean the house",
+        content: "buy a coffee",
         completed: false,
       },
     ];
-
-    render(<Todo items={items} />);
-    const todoItems = screen.getAllByTestId("todo-item");
-    await waitFor(() => {
-      expect(todoItems.length).toEqual(items.length);
+    it("search by keyword", () => {
+      render(<Todo items={items} />);
+      const input = screen.getByTestId("search-input");
+      act(() => {
+        userEvent.type(input, "buy");
+      });
+      expect(screen.getAllByTestId("todo-item").length).toEqual(2);
     });
-
-    const activeTab = screen.getByTestId("todo-active");
-    act(() => {
-      userEvent.click(activeTab);
-    });
-    expect(screen.getAllByTestId("todo-item").length).toEqual(2);
-  });
-
-  it("shows summary information", async () => {
-    const items = [
-      {
-        id: "1",
-        content: "buy some milk",
-        completed: false,
-      },
-      {
-        id: "2",
-        content: "learn react",
-        completed: true,
-      },
-      {
-        id: "3",
-        content: "clean the house",
-        completed: false,
-      },
-    ];
-
-    render(<Todo items={items} />);
-    const todoItems = screen.getAllByTestId("todo-item");
-    await waitFor(() => {
-      expect(todoItems.length).toEqual(items.length);
-    });
-
-    const activeTab = screen.getByTestId("todo-active");
-    act(() => {
-      userEvent.click(activeTab);
-    });
-
-    const completedTab = screen.getByTestId("todo-completed");
-    act(() => {
-      userEvent.click(completedTab);
-    });
-
-    const totalTab = screen.getByTestId("todo-total");
-    act(() => {
-      userEvent.click(totalTab);
-    });
-    expect(within(activeTab).getByText("2")).toBeInTheDocument();
-    expect(within(completedTab).getByText("1")).toBeInTheDocument();
-    expect(within(totalTab).getByText("3")).toBeInTheDocument();
   });
 });

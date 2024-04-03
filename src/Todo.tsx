@@ -1,4 +1,5 @@
 import { Aggregation } from "./Aggregation";
+import { SearchBox } from "./SearchBox";
 import "./Todo.css";
 import { TodoInput } from "./TodoInput";
 import { TodoList } from "./TodoList";
@@ -13,6 +14,7 @@ const Todo = ({ items }: { items?: TodoType[] }) => {
     deleteTodo,
     toggleTodo,
     switchCategory,
+    searchTodos,
   } = useTodos(items);
 
   return (
@@ -25,6 +27,7 @@ const Todo = ({ items }: { items?: TodoType[] }) => {
         onToggleItem={toggleTodo}
         onDeleteItem={deleteTodo}
       />
+      <SearchBox performSearch={searchTodos}/>
     </div>
   );
 };
