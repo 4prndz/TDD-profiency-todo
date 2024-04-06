@@ -1,5 +1,8 @@
 export const Category = ({
-  label, number, type, switchCategory,
+  label,
+  number,
+  type,
+  switchCategory,
 }: {
   label: string;
   number: number;
@@ -9,12 +12,13 @@ export const Category = ({
   return (
     <div>
       <label>
-        {label}
         <button
           data-testid={`todo-${type}`}
           onClick={() => switchCategory(type)}
+          className={`aggregation-button-${type}`}
         >
-          {number}
+          <span className="aggregation-label">{label}</span>
+          <span className="aggregation-number">{number}</span>
         </button>
       </label>
     </div>

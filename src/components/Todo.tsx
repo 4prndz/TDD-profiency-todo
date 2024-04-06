@@ -1,10 +1,10 @@
+import { useTodos } from "../hooks/useTodos";
+import { TodoType } from "../types";
 import { Aggregation } from "./Aggregation";
-import { SearchBox } from "./SearchBox";
+import { SearchBox } from "./SearchInput";
 import "./Todo.css";
 import { TodoInput } from "./TodoInput";
 import { TodoList } from "./TodoList";
-import { TodoType } from "./types";
-import { useTodos } from "./useTodos";
 
 const Todo = ({ items }: { items?: TodoType[] }) => {
   const {
@@ -19,7 +19,7 @@ const Todo = ({ items }: { items?: TodoType[] }) => {
 
   return (
     <div className="todo-container">
-      <h2>todos</h2>
+      <h1 className="todo-title">🌸 Proficiency Todo</h1>
       <TodoInput onItemAdded={addTodo} />
       <Aggregation aggregation={aggregation} switchCategory={switchCategory} />
       <TodoList
@@ -27,7 +27,7 @@ const Todo = ({ items }: { items?: TodoType[] }) => {
         onToggleItem={toggleTodo}
         onDeleteItem={deleteTodo}
       />
-      <SearchBox performSearch={searchTodos}/>
+      <SearchBox performSearch={searchTodos} />
     </div>
   );
 };

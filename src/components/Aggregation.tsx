@@ -6,7 +6,8 @@ type AggregationType = {
   active: number;
 };
 export const Aggregation = ({
-  aggregation, switchCategory,
+  aggregation,
+  switchCategory,
 }: {
   aggregation: AggregationType;
   switchCategory: (type: string) => void;
@@ -14,20 +15,23 @@ export const Aggregation = ({
   return (
     <div className="aggregation">
       <Category
-        label="Total:"
+        label="Total"
         number={aggregation.total}
         type="total"
-        switchCategory={switchCategory} />
+        switchCategory={switchCategory}
+      />
       <Category
-        label="Completed:"
+        label="Completed"
         number={aggregation.completed}
         type="completed"
-        switchCategory={switchCategory} />
+        switchCategory={switchCategory}
+      />
       <Category
-        label="Active:"
+        label="Active"
         number={aggregation.active}
         type="active"
-        switchCategory={switchCategory} />
+        switchCategory={switchCategory}
+      />
     </div>
   );
 };

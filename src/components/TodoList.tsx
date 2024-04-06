@@ -1,4 +1,5 @@
-import { TodoType } from "./types";
+import { FaTrashAlt } from "react-icons/fa";
+import { TodoType } from "../types";
 
 export const TodoList = ({
   todos,
@@ -22,9 +23,10 @@ export const TodoList = ({
           </span>
           <button
             data-testid="delete-button"
+            className="delete-buttom"
             onClick={() => onDeleteItem(todo)}
           >
-            Delete
+            <FaTrashAlt />
           </button>
         </div>
       ))}
