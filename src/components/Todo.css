@@ -85,11 +85,11 @@ body {
 }
 
 .aggregation-button-completed:hover {
-  background-color: #ea9d34;
+  background-color: #ebbcba;
   opacity: 0.7;
 }
 
 .aggregation-button-active:hover {
-  background-color: #ea9d34;
+  background-color: #31748f;
   opacity: 0.7;
 }
